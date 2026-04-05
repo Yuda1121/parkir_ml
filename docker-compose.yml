@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+
+  # ─────────────────────────────────────
+  # Service 1: Python FastAPI (ML Engine)
+  # ─────────────────────────────────────
+  python-api:
+    build:
+      context: ./parkir_ai
+      dockerfile: Dockerfile
+    container_name: parkir_python_api
+    ports:
+      - "8000:8000"       # akses langsung API docs: http://localhost:8000/docs
+    restart: unless-stopped
+    networks:
+      - parkir-network
+
+  # ─────────────────────────────────────
+  # Service 2: PHP CI3 (Frontend)
+  # ─────────────────────────────────────
+  ci3-web:
+    build:
+      context: ./parkir_ci3
+      dockerfile: Dockerfile
+    container_name: parkir_ci3_web
+    ports:
+      - "8080:80"         # akses dashboard: http://localhost:8080
+    depends_on:
+      - python-api
+    restart: unless-stopped
+    networks:
+      - parkir-network
+
+networks:
+  parkir-network:
+    driver: bridge
