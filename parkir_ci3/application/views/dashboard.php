@@ -244,16 +244,22 @@ function switchAlgo(algo) {
 
 function loadData(hari, jam) {
     $.ajax({
-        url: '<?= base_url("index.php/parkir/prediksi_ajax") ?>',
+        // Tembak LANGSUNG ke rute /dashboard di server Python lu
+        url: 'https://ai-parkir.prayudabowono.my.id/dashboard', 
         method: 'POST',
-        data: { hari, jam },
+        // FastAPI WAJIB pakai format JSON asli, bukan Form Data
+        contentType: 'application/json', 
+        data: JSON.stringify({ 
+            "hari": hari, 
+            "jam": jam 
+        }),
         dataType: 'json',
         success: function(res) {
             if (res.status !== 'success') { showError(res.message || 'Gagal'); return; }
             lastData = res;
             renderAll(res);
         },
-        error: function(xhr, s, err) { showError('Gagal konek server. ' + err); }
+        error: function(xhr, s, err) { showError('Gagal konek server AI. ' + err); }
     });
 }
 
