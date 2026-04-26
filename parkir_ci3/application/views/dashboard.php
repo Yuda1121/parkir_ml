@@ -244,7 +244,7 @@ function switchAlgo(algo) {
 
 function loadData(hari, jam) {
     $.ajax({
-        url: '<?= base_url("parkir/prediksi_ajax") ?>',
+        url: '<?= site_url("parkir/prediksi_ajax") ?>',
         method: 'POST',
         data: { hari, jam },
         dataType: 'json',
